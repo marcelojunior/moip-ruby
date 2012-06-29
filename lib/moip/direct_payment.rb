@@ -153,9 +153,17 @@ module MoIP
               if attributes[:forma] == "BoletoBancario"
                 # Dados extras
                 xml.Boleto {
-                  xml.DiasExpiracao(:Tipo => "Corridos") {
-                    xml.text attributes[:dias_expiracao]
-                  }
+
+                  if attributes[:dias_expiracao]
+                    xml.DiasExpiracao(:Tipo => "Corridos") {
+                      xml.text attributes[:dias_expiracao]
+                    }                    
+                  elsif attributes[:data_vencimento]
+                    xml.DataVencimento {
+                      xml.text attributes[:data_vencimento]
+                    }
+                  end
+                  
                   xml.Instrucao1 {
                     xml.text attributes[:instrucao_1]
                   }
