@@ -24,7 +24,7 @@ module MoIP
       #         <Status>{status da conta}</Status>
       #     </RespostaVerificarConta>
       # </ns1:verificarContaResponse>
-      # 
+      #
       # Valores Esperados: {status da conta}
       # Inexistente " Login inexistente no sistema MoIP "
       # Criado  " Login criado, porem não verificado "
@@ -33,7 +33,7 @@ module MoIP
 
       def verify account
         full_data = peform_action!(:get, "VerificarConta/#{account}")
-        return full_data["ns1:verificarContaResponse"]["RespostaVerificarConta"]["Status"] == "Verificado"
+        return full_data["verificarContaResponse"]["RespostaVerificarConta"]["Status"] == "Verificado"
       end
 
       # Envia uma instrução para pagamento único
@@ -42,15 +42,15 @@ module MoIP
         puts "************ XML ************"
         puts body
         full_data = peform_action!(:post, 'EnviarInstrucao/Unica', :body => body)
-       # raise full_data.inspect
-        get_response!(full_data["ns1:EnviarInstrucaoUnicaResponse"]["Resposta"])
+        # raise full_data.inspect
+        get_response!(full_data["EnviarInstrucaoUnicaResponse"]["Resposta"])
       end
 
       # Consulta dos dados das autorizações e pagamentos associados à Instrução
       def query(token)
         full_data = peform_action!(:get, "ConsultarInstrucao/#{token}")
 
-        get_response!(full_data["ns1:ConsultarTokenResponse"]["RespostaConsultar"])
+        get_response!(full_data["ConsultarTokenResponse"]["RespostaConsultar"])
       end
 
       # Retorna a URL de acesso ao MoIP
@@ -80,7 +80,7 @@ module MoIP
         raise(MissingTokenError, "É necessário informar um token na configuração") if MoIP.token.nil? || MoIP.token.empty?
 
         raise(MissingKeyError, "É necessário informar um key na configuração") if MoIP.key.nil? || MoIP.key.empty?
-        
+
         response = self.send(action_name, url, options)
         raise(WebServerResponseError, "Ocorreu um erro ao chamar o webservice") if response.nil?
         response
